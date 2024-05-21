@@ -42,6 +42,11 @@ for (const [colorIndex, colorValue] of colors.entries()) {
 const app = express();
 
 app.use(express.static(path.join(process.cwd(), "client")));
+app.use(express.json())
+
+app.get("/api/colors", (_, res) => {
+  res.json({colors: colors});
+})
 
 app.get("/*", (_, res) => {
   res.send("Place(holder)");
