@@ -67,7 +67,12 @@ wss.on("connection", function connection(ws) {
 
   //console.log("connection opened");
 
-  //ws.send('something');
+  ws.send(JSON.stringify({
+    'type': 'field state update',
+    'payload': {
+      'field': place,
+    }
+  }));
 });
 
 server.on("upgrade", (req, socket, head) => {
