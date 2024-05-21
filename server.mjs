@@ -58,12 +58,28 @@ const wss = new WebSocket.Server({
   noServer: true,
 });
 
+function broadcastTurn(data) {
+  const message = JSON.parse(data);
+  if (message.type != 'pixel-changed')
+    return;
+  const {x, y} = message.payload
+  if (x < 0 || x >= size || y < 0 || y >= size)
+    return;
+  wss.clients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN){
+      client.send(data);
+    }
+  });
+}
+
 wss.on("connection", function connection(ws) {
   ws.on('error', console.error);
 
   ws.on('message', function message(data) {
     console.log('received: %s', data);
   });
+
+  ws.on('message', broadcastTurn)
 
   //console.log("connection opened");
 
