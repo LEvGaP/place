@@ -13,8 +13,13 @@ const main = apiKey => {
   ws.addEventListener("message", console.log);
   ws.addEventListener("message", (me) => {
     const data = JSON.parse(me.data);
-    const field = data.payload.field;
-    drawer.putArray(field);
+    if (data.type === "field state update"){
+      const field = data.payload.field;
+      drawer.putArray(field);
+    }
+    if (data.type === "pixel-changed"){
+      drawer.put(data.payload.x, data.payload.y, data.payload.color);
+    }
   });
 
   timeout.next = new Date();
