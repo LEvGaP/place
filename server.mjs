@@ -62,9 +62,10 @@ function broadcastTurn(data) {
   const message = JSON.parse(data);
   if (message.type != 'pixel-changed')
     return;
-  const {x, y} = message.payload
+  const {x, y, color} = message.payload
   if (x < 0 || x >= size || y < 0 || y >= size)
     return;
+  place[x + y * size] = color;
   wss.clients.forEach(client => {
     if (client.readyState === WebSocket.OPEN){
       client.send(data);
