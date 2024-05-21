@@ -58,6 +58,18 @@ const wss = new WebSocket.Server({
   noServer: true,
 });
 
+wss.on("connection", function connection(ws) {
+  ws.on('error', console.error);
+
+  ws.on('message', function message(data) {
+    console.log('received: %s', data);
+  });
+
+  //console.log("connection opened");
+
+  //ws.send('something');
+});
+
 server.on("upgrade", (req, socket, head) => {
   const url = new URL(req.url, req.headers.origin);
   console.log(url);
